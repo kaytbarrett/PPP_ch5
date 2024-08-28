@@ -77,7 +77,7 @@ Token Token_stream::get()
     switch (ch) {
     case '=':    // for "print"
     case 'x':    // for "quit"
-    case '(': case ')': case '+': case '-': case '*': case '/': case '{': case '}':
+    case '(': case ')': case '+': case '-': case '*': case '/': case '{': case '}': case '!':
         return Token(ch);        // let each character represent itself
     case '.':
     case '0': case '1': case '2': case '3': case '4':
@@ -123,7 +123,26 @@ double primary()
         return d;
     }
     case '8':            // we use '8' to represent a number
-        return t.value;  // return the number's value
+    {
+        int left = t.value;
+        t = ts.get();
+
+        if (t.kind == '!')
+        {
+            if (left < 0) error("Factorial of a negative number is undefined");
+
+            int result = 1;
+            for(int i = left; i > 1; --i )
+            {
+            result *= i;
+            }
+            left = result;
+        } else {
+            ts.putback(t);  // put the token back if it's not '!'
+        }
+
+        return left;  // return the number's value
+    }
     default:
         error("primary expected");
     }
