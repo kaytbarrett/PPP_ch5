@@ -21,39 +21,29 @@
 using namespace std;
 
 // Function to calculate permutations
-int calculatePermutations(int a, int b){
-    int total = 0;
-    int c = a - b;
-    int numerator = 1;
-    int denominator = 1;
+long long calculatePermutations(int a, int b){
 
+    long long total = 1;
 
-    for (int i = c; i > 1; i--){
-        denominator *= i;
+    // Calculate P(a, b) = a * (a-1) * ... * (a-b+1)
+    for (int i = 0; i < b; i++) {
+        total *= (a - i);
     }
-
-    for (int i = a; i > 1; i--){
-        numerator *= i;
-    }
-
-    total = numerator/denominator;
 
     return total;
 }
 
 // Function to calculate combinations
-int calculateCombinations(int a, int b){
-    int total = 0;
+long long calculateCombinations(int a, int b){
     int numerator = calculatePermutations(a, b);
     int denominator = 1;
 
+    // Calculate b! for combinations
     for (int i = b; i > 1; i--){
         denominator *= i;
     }
 
-    total = numerator/denominator;
-
-    return total;
+   return numerator/denominator;
 }
 
 int main(){
@@ -63,6 +53,12 @@ int main(){
 
     cout << "Please enter two numbers (ex. 10 3): " << endl;
     cin >> a >> b;
+
+
+    if (b > a || a < 0 || b < 0) {
+        cerr << "Invalid input: a must be >= b and both must be non-negative." << endl;
+        exit(EXIT_FAILURE);
+    }
 
     cout << "Do you want to calculate permutations or combinations? (Enter 'p' or 'c'): " << endl;
     cin >> input;
